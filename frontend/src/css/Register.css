@@ -1,0 +1,73 @@
+.register-page{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),
+    url("https://images.unsplash.com/photo-1507842217343-583bb7270b66");
+    background-size:cover;
+    background-position:center;
+}
+
+.register-box{
+    width:420px;
+    background:#fff;
+    padding:40px;
+    border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+    text-align:center;
+}
+
+.register-box h2{
+    color:#0d47a1;
+    margin-bottom:25px;
+    font-size:30px;
+}
+
+.register-box input{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:16px;
+    outline:none;
+    transition:.3s;
+}
+
+.register-box input:focus{
+    border-color:#0d47a1;
+    box-shadow:0 0 5px rgba(13,71,161,.3);
+}
+
+.register-box button{
+    width:100%;
+    padding:12px;
+    margin-top:20px;
+    border:none;
+    border-radius:6px;
+    background:#0d47a1;
+    color:white;
+    font-size:17px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.register-box button:hover{
+    background:#08306b;
+}
+
+.register-box p{
+    margin-top:20px;
+    color:#666;
+}
+
+.register-box a{
+    color:#0d47a1;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.register-box a:hover{
+    text-decoration:underline;
+}
