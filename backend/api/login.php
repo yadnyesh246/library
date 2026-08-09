@@ -23,12 +23,18 @@ $user = $db->users->findOne([
 ]);
 
 if ($user) {
+
     echo json_encode([
         "status" => "success",
         "message" => "Login Successful",
-        "role" => $user["role"]
+        "role" => $user["role"],
+        "userId" => (string)$user["_id"],
+        "studentId" => $user["studentId"] ?? "",
+        "username" => $user["username"]
     ]);
+
 } else {
+
     echo json_encode([
         "status" => "error",
         "message" => "Invalid Username or Password"

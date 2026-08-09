@@ -1,0 +1,158 @@
+.issue-header {
+    margin-top: 20px;
+}
+
+
+
+.issue-form {
+    margin-top: 30px;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
+    max-width: 700px;
+}
+
+.issue-form h2 {
+    color: #0d47a1;
+    margin-bottom: 25px;
+}
+
+.issue-form form {
+    display: grid;
+    gap: 20px;
+}
+
+.issue-form input,
+.issue-form select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.issue-form button {
+    padding: 12px;
+    background: #0d47a1;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.issue-form button:hover {
+    background: #1565c0;
+}
+
+
+
+
+.issued-books {
+    margin-top: 30px;
+    margin-bottom: 40px;
+
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 10px;
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+
+    width: 100%;
+
+    box-sizing: border-box;
+}
+
+.issued-books h2 {
+    color: #0d47a1;
+
+    margin: 0 0 20px 0;
+
+    font-size: 24px;
+}
+
+.table-container {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.issued-books table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+.issued-books th {
+    background: #0d47a1;
+
+    color: white;
+
+    padding: 14px 12px;
+
+    text-align: left;
+
+    font-size: 15px;
+}
+
+.issued-books td {
+    padding: 13px 12px;
+
+    border-bottom: 1px solid #ddd;
+
+    color: #333;
+
+    font-size: 15px;
+}
+
+.issued-books tbody tr:hover {
+    background: #f5f8ff;
+}
+
+
+
+
+.status-issued {
+    display: inline-block;
+
+    padding: 5px 12px;
+
+    background: #e8f5e9;
+
+    color: #2e7d32;
+
+    border-radius: 20px;
+
+    font-weight: 600;
+
+    font-size: 13px;
+}
+
+
+
+.no-books {
+    text-align: center;
+
+    padding: 25px !important;
+
+    color: #777 !important;
+}
+.return-btn {
+    padding: 7px 12px;
+    background: #2e7d32;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.return-btn:hover {
+    background: #1b5e20;
+}
+
+.returned {
+    color: #2e7d32;
+    font-weight: 600;
+}

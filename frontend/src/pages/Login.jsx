@@ -34,6 +34,10 @@ function Login() {
         if (result.role === "admin") {
           navigate("/admin-dashboard");
         } else if (result.role === "student") {
+
+          localStorage.setItem("studentId", result.studentId);
+          localStorage.setItem("username", result.username);
+
           navigate("/student-dashboard");
         }
       } else {

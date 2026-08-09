@@ -1,0 +1,30 @@
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.header-right input{
+    padding:10px 15px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    width:220px;
+}
+
+.notification{
+    font-size:24px;
+    cursor:pointer;
+}
+
+.header-right img{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+}
