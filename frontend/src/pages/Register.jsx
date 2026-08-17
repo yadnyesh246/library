@@ -6,37 +6,56 @@ function Register() {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [course, setCourse] = useState("");
+  const [year, setYear] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
- const handleRegister = async (e) => {
-  e.preventDefault();
+  const handleRegister = async (e) => {
+    e.preventDefault();
 
-  if (password !== confirmPassword) {
-    alert("Passwords do not match");
-    return;
-  }
-
-  const response = await fetch(
-    "http://localhost/library-management/backend/api/register.php",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        username,
-        email,
-        password,
-      }),
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
     }
-  );
 
-  const result = await response.json();
+    try {
+      const response = await fetch(
+        "http://localhost/library-management/backend/api/register.php",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            username,
+            email,
+            course,
+            year,
+            password,
+          }),
+        }
+      );
 
-  alert(result.message);
-};
+      const result = await response.json();
+
+      alert(result.message);
+
+      if (result.success) {
+        setName("");
+        setUsername("");
+        setEmail("");
+        setCourse("");
+        setYear("");
+        setPassword("");
+        setConfirmPassword("");
+      }
+    } catch (error) {
+      console.log("Registration Error:", error);
+      alert("Something went wrong");
+    }
+  };
 
   return (
     <div className="register-page">
@@ -71,6 +90,22 @@ function Register() {
           />
 
           <input
+            type="text"
+            placeholder="Course"
+            value={course}
+            onChange={(e) => setCourse(e.target.value)}
+            required
+          />
+
+          <input
+            type="text"
+            placeholder="Year"
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+            required
+          />
+
+          <input
             type="password"
             placeholder="Password"
             value={password}
@@ -86,12 +121,15 @@ function Register() {
             required
           />
 
-          <button type="submit">Register</button>
+          <button type="submit">
+            Register
+          </button>
 
         </form>
 
         <p>
-          Already have an account? <Link to="/login">Login</Link>
+          Already have an account?{" "}
+          <Link to="/login">Login</Link>
         </p>
 
       </div>

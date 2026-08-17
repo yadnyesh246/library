@@ -9,50 +9,46 @@ require_once "../config/db.php";
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-$id = $data["id"] ?? "";
-$title = $data["title"] ?? "";
-$author = $data["author"] ?? "";
-$category = $data["category"] ?? "";
-$quantity = (int)($data["quantity"] ?? 0);
+$userId = $data["userId"] ?? "";
 
-if (empty($id)) {
+if (empty($userId)) {
+
     echo json_encode([
         "status" => "error",
-        "message" => "Book ID is required"
+        "message" => "User ID is required"
     ]);
+
     exit();
 }
 
 try {
 
-    $bookId = new MongoDB\BSON\ObjectId($id);
+    $objectId = new MongoDB\BSON\ObjectId($userId);
 
-    $result = $db->books->updateOne(
+    $result = $db->users->updateOne(
         [
-            "_id" => $bookId
+            "_id" => $objectId,
+            "role" => "student"
         ],
         [
             '$set' => [
-                "title" => $title,
-                "author" => $author,
-                "category" => $category,
-                "quantity" => $quantity
+                "status" => "rejected"
             ]
         ]
     );
 
-    if ($result->getMatchedCount() > 0) {
+    if ($result->getModifiedCount() > 0) {
 
         echo json_encode([
             "status" => "success",
-            "message" => "Book Updated Successfully"
+            "message" => "Student rejected successfully"
         ]);
 
     } else {
 
         echo json_encode([
             "status" => "error",
-            "message" => "Book not found"
+            "message" => "Student could not be rejected"
         ]);
     }
 

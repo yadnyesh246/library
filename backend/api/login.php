@@ -14,30 +14,87 @@ require_once "../config/db.php";
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-$username = $data["username"] ?? "";
-$password = $data["password"] ?? "";
+$username = trim($data["username"] ?? "");
+$password = trim($data["password"] ?? "");
 
-$user = $db->users->findOne([
-    "username" => $username,
-    "password" => $password
-]);
+if ($username === "" || $password === "") {
 
-if ($user) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Username and Password are required"
+    ]);
+
+    exit();
+}
+
+try {
+
+    $user = $db->users->findOne([
+        "username" => $username,
+        "password" => $password
+    ]);
+
+    if (!$user) {
+
+        echo json_encode([
+            "status" => "error",
+            "message" => "Invalid Username or Password"
+        ]);
+
+        exit();
+    }
+
+    $role = $user["role"] ?? "";
+
+    if ($role === "student") {
+
+        $studentStatus = $user["status"] ?? "pending";
+
+        if ($studentStatus === "pending") {
+
+            echo json_encode([
+                "status" => "error",
+                "message" => "Your account is waiting for admin approval"
+            ]);
+
+            exit();
+        }
+
+        if ($studentStatus === "rejected") {
+
+            echo json_encode([
+                "status" => "error",
+                "message" => "Your student account has been rejected"
+            ]);
+
+            exit();
+        }
+
+        if ($studentStatus !== "approved") {
+
+            echo json_encode([
+                "status" => "error",
+                "message" => "Your account is not approved"
+            ]);
+
+            exit();
+        }
+    }
 
     echo json_encode([
         "status" => "success",
         "message" => "Login Successful",
-        "role" => $user["role"],
+        "role" => $role,
         "userId" => (string)$user["_id"],
         "studentId" => $user["studentId"] ?? "",
-        "username" => $user["username"]
+        "username" => $user["username"] ?? ""
     ]);
 
-} else {
+} catch (Exception $e) {
 
     echo json_encode([
         "status" => "error",
-        "message" => "Invalid Username or Password"
+        "message" => $e->getMessage()
     ]);
 }
 

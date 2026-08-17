@@ -17,10 +17,18 @@ $data = json_decode(file_get_contents("php://input"), true);
 $name = trim($data["name"] ?? "");
 $username = trim($data["username"] ?? "");
 $email = trim($data["email"] ?? "");
+$course = trim($data["course"] ?? "");
+$year = trim($data["year"] ?? "");
 $password = trim($data["password"] ?? "");
 
-if ($name === "" || $username === "" || $email === "" || $password === "") {
-
+if (
+    $name === "" ||
+    $username === "" ||
+    $email === "" ||
+    $course === "" ||
+    $year === "" ||
+    $password === ""
+) {
     echo json_encode([
         "success" => false,
         "message" => "All fields are required"
@@ -31,13 +39,11 @@ if ($name === "" || $username === "" || $email === "" || $password === "") {
 
 try {
 
-    // Check username
     $existingUser = $db->users->findOne([
         "username" => $username
     ]);
 
     if ($existingUser) {
-
         echo json_encode([
             "success" => false,
             "message" => "Username already exists"
@@ -46,14 +52,11 @@ try {
         exit();
     }
 
-
-    // Check email
     $existingEmail = $db->users->findOne([
         "email" => $email
     ]);
 
     if ($existingEmail) {
-
         echo json_encode([
             "success" => false,
             "message" => "Email already exists"
@@ -62,31 +65,29 @@ try {
         exit();
     }
 
-
-    // 1. Create student
     $studentResult = $db->students->insertOne([
         "name" => $name,
-        "email" => $email
+        "email" => $email,
+        "course" => $course,
+        "year" => $year,
+        "status" => "pending"
     ]);
 
-    // Get newly created student ID
     $studentId = $studentResult->getInsertedId();
 
-
-    // 2. Create user account
     $db->users->insertOne([
         "name" => $name,
         "username" => $username,
         "email" => $email,
         "password" => $password,
         "role" => "student",
-        "studentId" => (string)$studentId
+        "studentId" => (string)$studentId,
+        "status" => "pending"
     ]);
-
 
     echo json_encode([
         "success" => true,
-        "message" => "Registration Successful"
+        "message" => "Registration successful. Please wait for admin approval."
     ]);
 
 } catch (Exception $e) {

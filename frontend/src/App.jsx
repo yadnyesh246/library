@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PendingStudents from "./pages/PendingStudents";
 import IssueBook from "./pages/IssueBook";
 import Students from "./pages/Students";
 import Books from "./pages/Books";
@@ -8,6 +9,9 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminDashboard from "./pages/AdminDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
+ import Fines from "./pages/Fines"; 
+import RejectedStudents from "./pages/RejectedStudents";
+import ReturnBook from "./pages/ReturnBook";
 
 function App() {
   return (
@@ -22,6 +26,11 @@ function App() {
         <Route path="/books" element={<Books />} />
         <Route path="/students" element={<Students />} />
         <Route path="/issuebook" element={<IssueBook />} />
+      
+       <Route path="/fines" element={<Fines />} />
+        <Route path="/pending-students"element={<PendingStudents />}/>
+        <Route path="/rejected-students"element={<RejectedStudents />}/>
+        <Route path="/returnbook" element={<ReturnBook />} />
       </Routes>
     </BrowserRouter>
   );

@@ -10,12 +10,14 @@ $books = $db->books->find();
 $data = [];
 
 foreach ($books as $book) {
+
     $data[] = [
         "_id" => (string)$book["_id"],
-        "title" => $book["title"],
-        "author" => $book["author"],
-        "category" => $book["category"],
-        "quantity" => $book["quantity"]
+        "title" => $book["title"] ?? "",
+        "author" => $book["author"] ?? "",
+        "category" => $book["category"] ?? "",
+        "quantity" => $book["quantity"] ?? 0,
+        "image" => $book["image"] ?? ""
     ];
 }
 

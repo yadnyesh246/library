@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import BackButton from "../components/BackButton";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import "../css/IssueBook.css";
@@ -163,6 +164,7 @@ function IssueBook() {
       <div className="main-content">
         <Header />
 
+        <BackButton />
         <div className="issue-header">
           <h1>Issue Book</h1>
         </div>

@@ -21,7 +21,6 @@ if (empty($id)) {
 
 try {
 
-    // Issued book find karo
     $issuedBook = $db->issuedBooks->findOne([
         "_id" => new MongoDB\BSON\ObjectId($id)
     ]);
@@ -34,7 +33,6 @@ try {
         exit;
     }
 
-    // Agar already Returned hai
     if ($issuedBook->status === "Returned") {
         echo json_encode([
             "status" => "error",
@@ -43,10 +41,22 @@ try {
         exit;
     }
 
-    // Book ID nikalo
     $bookObjectId = new MongoDB\BSON\ObjectId($issuedBook->bookId);
 
-    // Book ki quantity +1 karo
+    $today = date("Y-m-d");
+
+    $dueDate = new DateTime($issuedBook->returnDate);
+    $actualReturnDate = new DateTime($today);
+
+    $lateDays = 0;
+
+    if ($actualReturnDate > $dueDate) {
+        $difference = $dueDate->diff($actualReturnDate);
+        $lateDays = $difference->days;
+    }
+
+    $fine = $lateDays * 10;
+
     $bookResult = $db->books->updateOne(
         [
             "_id" => $bookObjectId
@@ -66,21 +76,28 @@ try {
         exit;
     }
 
-    // Issued book ka status Returned karo
     $db->issuedBooks->updateOne(
         [
             "_id" => new MongoDB\BSON\ObjectId($id)
         ],
         [
             '$set' => [
-                "status" => "Returned"
+                "status" => "Returned",
+                "actualReturnDate" => $today,
+                "lateDays" => $lateDays,
+                "fine" => $fine,
+                "fineStatus" => $fine > 0 ? "Unpaid" : "Paid",
+                "paidDate" => ""
             ]
         ]
     );
 
     echo json_encode([
         "status" => "success",
-        "message" => "Book Returned Successfully"
+        "message" => "Book Returned Successfully",
+        "actualReturnDate" => $today,
+        "lateDays" => $lateDays,
+        "fine" => $fine
     ]);
 
 } catch (Exception $e) {

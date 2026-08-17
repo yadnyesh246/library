@@ -37,8 +37,18 @@ function IssuedBooks() {
             <p>Student: {book.studentName}</p>
             <p>Book: {book.bookTitle}</p>
             <p>Issue Date: {book.issueDate}</p>
-            <p>Return Date: {book.returnDate}</p>
+            <p>Due Date: {book.returnDate}</p>
+
+            {book.status === "Returned" && (
+              <>
+                <p>Returned Date: {book.returnedDate}</p>
+                <p>Late Days: {book.lateDays || 0}</p>
+                <p>Fine: ₹{book.fine || 0}</p>
+              </>
+            )}
+
             <p>Status: {book.status}</p>
+
             <hr />
           </div>
         ))}

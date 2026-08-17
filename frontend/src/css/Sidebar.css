@@ -35,30 +35,32 @@
   color: #ffd54f;
   padding-left: 10px;
 }
-.admin-profile{
-    position:absolute;
-    bottom:30px;
-    left:0;
-    width:100%;
-    text-align:center;
+
+.admin-profile {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  width: 100%;
+  text-align: center;
 }
 
-.admin-profile img{
-    width:70px;
-    height:70px;
-    border-radius:50%;
-    border:3px solid white;
+.admin-profile img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 3px solid white;
 }
 
-.admin-profile h3{
-    margin-top:10px;
-    font-size:18px;
+.admin-profile h3 {
+  margin-top: 10px;
+  font-size: 18px;
 }
 
-.admin-profile p{
-    font-size:14px;
-    color:#ddd;
+.admin-profile p {
+  font-size: 14px;
+  color: #ddd;
 }
-.dashboard-content{
-    margin-left:250px;
+
+.dashboard-content {
+  margin-left: 250px;
 }

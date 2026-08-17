@@ -29,8 +29,8 @@ function Header({
         <img
           src={
             role === "student"
-              ? "https://i.pravatar.cc/100?img=12"
-              : "https://i.pravatar.cc/100?img=1"
+              ? "https://i.pinimg.com/236x/5a/bd/98/5abd985735a8fd4adcb0e795de6a1005.jpg?nii=t"
+              : "https://i.pinimg.com/236x/5a/bd/98/5abd985735a8fd4adcb0e795de6a1005.jpg?nii=t"
           }
           alt={role}
         />

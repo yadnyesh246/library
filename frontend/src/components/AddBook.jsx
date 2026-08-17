@@ -13,7 +13,6 @@ function AddBook({
   editId,
   setEditId,
 }) {
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -21,40 +20,47 @@ function AddBook({
       ? "http://localhost/library-management/backend/api/updateBook.php"
       : "http://localhost/library-management/backend/api/addBook.php";
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: editId,
-        title,
-        author,
-        category,
-        quantity,
-      }),
-    });
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: editId,
+          title,
+          author,
+          category,
+          quantity,
+        }),
+      });
 
-    const result = await response.json();
+      const result = await response.json();
 
-    alert(result.message);
+      alert(result.message);
 
-    setTitle("");
-    setAuthor("");
-    setCategory("");
-    setQuantity("");
-    setEditId(null);
+      if (result.status === "success") {
+        setTitle("");
+        setAuthor("");
+        setCategory("");
+        setQuantity("");
+        setEditId(null);
 
-    onBookAdded();
+        onBookAdded();
+      }
+    } catch (error) {
+      console.log("Add Book Error:", error);
+      alert("Something went wrong");
+    }
   };
 
   return (
     <div className="add-book">
-
-      <h2>{editId ? "Update Book" : "Add New Book"}</h2>
+      <h2>
+        {editId ? "Update Book" : "Add New Book"}
+      </h2>
 
       <form onSubmit={handleSubmit}>
-
         <input
           type="text"
           placeholder="Book Title"
@@ -90,9 +96,7 @@ function AddBook({
         <button type="submit">
           {editId ? "Update Book" : "Save Book"}
         </button>
-
       </form>
-
     </div>
   );
 }

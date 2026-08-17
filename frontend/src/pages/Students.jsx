@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import BackButton from "../components/BackButton";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import AddStudent from "../components/AddStudent";
@@ -7,6 +9,10 @@ import "../css/Students.css";
 function Students() {
     const [students, setStudents] = useState([]);
     const [editingStudent, setEditingStudent] = useState(null);
+    const [search, setSearch] = useState("");
+
+    const navigate = useNavigate();
+
     useEffect(() => {
         fetchStudents();
     }, []);
@@ -23,6 +29,7 @@ function Students() {
             console.log(error);
         }
     };
+
     const handleDelete = async (id) => {
         const confirmDelete = window.confirm(
             "Are you sure you want to delete this student?"
@@ -50,20 +57,35 @@ function Students() {
         fetchStudents();
     };
 
+    const filteredStudents = students.filter((student) =>
+        student.name?.toLowerCase().includes(search.toLowerCase())
+    );
+
     return (
         <>
             <Sidebar />
 
             <div className="main-content">
                 <Header />
-
+                 <BackButton />
                 <div className="student-header">
                     <h1>Manage Students</h1>
                 </div>
 
-                <AddStudent onStudentAdded={fetchStudents}
+                <AddStudent
+                    onStudentAdded={fetchStudents}
                     editingStudent={editingStudent}
-                    setEditingStudent={setEditingStudent} />
+                    setEditingStudent={setEditingStudent}
+                />
+
+                <div className="student-search">
+                    <input
+                        type="text"
+                        placeholder="Search student by name..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                </div>
 
                 <div className="student-table">
                     <table>
@@ -78,32 +100,55 @@ function Students() {
                         </thead>
 
                         <tbody>
-                            {students.length > 0 ? (
-                                students.map((student) => (
+                            {filteredStudents.length > 0 ? (
+                                filteredStudents.map((student) => (
                                     <tr key={student._id}>
                                         <td>{student.name}</td>
+
                                         <td>{student.email}</td>
+
                                         <td>{student.course}</td>
+
                                         <td>{student.year}</td>
+
                                         <td>
                                             <button
                                                 className="edit-btn"
-                                                onClick={() => setEditingStudent(student)}
+                                                onClick={() =>
+                                                    setEditingStudent(student)
+                                                }
                                             >
                                                 Edit
                                             </button>
+
                                             <button
                                                 className="delete-btn"
-                                                onClick={() => handleDelete(student._id)}
+                                                onClick={() =>
+                                                    handleDelete(student._id)
+                                                }
                                             >
                                                 Delete
+                                            </button>
+
+                                            <button
+                                                className="view-books-btn"
+                                                onClick={() =>
+                                                    navigate(
+                                                        `/returnbook?studentId=${student._id}`
+                                                    )
+                                                }
+                                            >
+                                                View Books
                                             </button>
                                         </td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="5" style={{ textAlign: "center" }}>
+                                    <td
+                                        colSpan="5"
+                                        style={{ textAlign: "center" }}
+                                    >
                                         No Students Found
                                     </td>
                                 </tr>

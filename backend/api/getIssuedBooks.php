@@ -13,7 +13,41 @@ try {
 
     $data = [];
 
+    $finePerDay = 10;
+    $today = new DateTime();
+
     foreach ($issuedBooks as $book) {
+
+        $returnDate = $book->returnDate ?? "";
+        $status = $book->status ?? "Issued";
+
+        $lateDays = 0;
+        $fine = 0;
+
+        if ($status === "Issued" && !empty($returnDate)) {
+
+            $dueDate = new DateTime($returnDate);
+
+            if ($today > $dueDate) {
+
+                $difference = $today->diff($dueDate);
+
+                $lateDays = $difference->days;
+                $fine = $lateDays * $finePerDay;
+                $status = "Overdue";
+
+            } else {
+
+                $lateDays = 0;
+                $fine = 0;
+                $status = "Issued";
+            }
+
+        } else {
+
+            $lateDays = $book->lateDays ?? 0;
+            $fine = $book->fine ?? 0;
+        }
 
         $data[] = [
             "_id" => (string)$book->_id,
@@ -22,8 +56,13 @@ try {
             "bookId" => $book->bookId ?? "",
             "bookTitle" => $book->bookTitle ?? "",
             "issueDate" => $book->issueDate ?? "",
-            "returnDate" => $book->returnDate ?? "",
-            "status" => $book->status ?? ""
+            "returnDate" => $returnDate,
+            "actualReturnDate" => $book->actualReturnDate ?? "",
+            "lateDays" => $lateDays,
+            "fine" => $fine,
+            "fineStatus" => $book->fineStatus ?? "Unpaid",
+            "paidDate" => $book->paidDate ?? "",
+            "status" => $status
         ];
     }
 

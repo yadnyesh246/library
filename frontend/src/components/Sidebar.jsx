@@ -40,18 +40,27 @@ function Sidebar({
                 Students
               </Link>
             </li>
-
+            <li>
+              <Link to="/pending-students">
+                Pending Students
+              </Link>
+            </li>
             <li>
               <Link to="/issuebook">
                 Issue Book
               </Link>
             </li>
-
             <li>
-              <Link to="/returnbook">
-                Return Book
+              <Link to="/fines">
+                Fine Management
               </Link>
             </li>
+            <li>
+              <Link to="/rejected-students">
+                Rejected Students
+              </Link>
+            </li>
+           
           </>
         )}
 
@@ -71,7 +80,7 @@ function Sidebar({
             Logout
           </Link>
         </li>
-
+        
       </ul>
 
       <hr />

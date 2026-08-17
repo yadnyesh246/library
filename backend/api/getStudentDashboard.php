@@ -19,10 +19,8 @@ if (empty($studentId)) {
 
 try {
 
-    // String ID ko MongoDB ObjectId me convert karo
     $studentObjectId = new MongoDB\BSON\ObjectId($studentId);
 
-    // Student find karo
     $student = $db->students->findOne([
         "_id" => $studentObjectId
     ]);
@@ -35,7 +33,6 @@ try {
         exit;
     }
 
-    // Student ke issued books
     $issuedCursor = $db->issuedBooks->find([
         "studentId" => $studentId
     ]);
@@ -44,26 +41,28 @@ try {
 
     foreach ($issuedCursor as $book) {
 
-        $issuedBooks[] = [
-            "_id" => (string)$book->_id,
-            "bookTitle" => $book->bookTitle ?? "",
-            "issueDate" => $book->issueDate ?? "",
-            "returnDate" => $book->returnDate ?? "",
-            "status" => $book->status ?? ""
-        ];
+   $issuedBooks[] = [
+    "_id" => (string)$book->_id,
+    "bookTitle" => $book->bookTitle ?? "",
+    "issueDate" => $book->issueDate ?? "",
+    "returnDate" => $book->returnDate ?? "",
+    "actualReturnDate" => $book->actualReturnDate ?? "",
+    "lateDays" => $book->lateDays ?? 0,
+    "fine" => $book->fine ?? 0,
+    "fineStatus" => $book->fineStatus ?? "Unpaid",
+    "paidDate" => $book->paidDate ?? "",
+    "status" => $book->status ?? ""
+];
     }
 
-    // Final response
     echo json_encode([
-        "status" => "success",
-
+        "status" => "success",  
         "student" => [
             "name" => $student->name ?? "",
             "email" => $student->email ?? "",
             "course" => $student->course ?? "",
             "year" => $student->year ?? ""
         ],
-
         "issuedBooks" => $issuedBooks
     ]);
 

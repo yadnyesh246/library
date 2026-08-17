@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
-import Sidebar from "../components/Sidebar";
+import BackButton from "../components/BackButton";
 import Header from "../components/Header";
 import AddBook from "../components/AddBook";
 import "../css/Books.css";
 
 function Books() {
   const [books, setBooks] = useState([]);
+
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [category, setCategory] = useState("");
   const [quantity, setQuantity] = useState("");
+
   const [editId, setEditId] = useState(null);
+
   useEffect(() => {
     fetchBooks();
   }, []);
@@ -22,115 +25,131 @@ function Books() {
       );
 
       const data = await response.json();
-      console.log(data);
+
+      console.log("BOOKS:", data);
+
       setBooks(data);
     } catch (error) {
-      console.log("Error:", error);
+      console.log("Fetch Books Error:", error);
     }
   };
+
   const handleDelete = async (id) => {
-
-    const confirmDelete = window.confirm("Are you sure you want to delete this book?");
-
-    if (!confirmDelete) return;
-
-    const response = await fetch(
-      "http://localhost/library-management/backend/api/deleteBook.php",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id,
-        }),
-      }
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this book?"
     );
 
-    const result = await response.json();
+    if (!confirmDelete) {
+      return;
+    }
 
-    alert(result.message);
+    try {
+      const response = await fetch(
+        "http://localhost/library-management/backend/api/deleteBook.php",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: id,
+          }),
+        }
+      );
 
-    fetchBooks();
+      const result = await response.json();
 
+      alert(result.message);
+
+      if (result.status === "success") {
+        fetchBooks();
+      }
+    } catch (error) {
+      console.log("Delete Book Error:", error);
+      alert("Something went wrong");
+    }
   };
+
   return (
-    <>
-      <Sidebar />
+    <div className="main-content">
+      <Header />
+      <BackButton />
+      <div className="book-header">
+        <h1>Manage Books</h1>
+      </div>
 
-      <div className="main-content">
-        <Header />
+      <AddBook
+        onBookAdded={fetchBooks}
+        title={title}
+        setTitle={setTitle}
+        author={author}
+        setAuthor={setAuthor}
+        category={category}
+        setCategory={setCategory}
+        quantity={quantity}
+        setQuantity={setQuantity}
+        editId={editId}
+        setEditId={setEditId}
+      />
 
-        <div className="book-header">
-          <h1>Manage Books</h1>
-        </div>
+      <div className="book-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Category</th>
+              <th>Quantity</th>
+              <th>Action</th>
+            </tr>
+          </thead>
 
-        <AddBook onBookAdded={fetchBooks}
-          title={title}
-          setTitle={setTitle}
-          author={author}
-          setAuthor={setAuthor}
-          category={category}
-          setCategory={setCategory}
-          quantity={quantity}
-          setQuantity={setQuantity}
-          editId={editId}
-          setEditId={setEditId} />
+          <tbody>
+            {books.length > 0 ? (
+              books.map((book) => (
+                <tr key={book._id}>
+                  <td>{book.title}</td>
 
-        <div className="book-table">
-          <table>
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Category</th>
-                <th>Quantity</th>
-                <th>Action</th>
-              </tr>
-            </thead>
+                  <td>{book.author}</td>
 
-            <tbody>
-              {books.length > 0 ? (
-                books.map((book) => (
-                  <tr key={book._id}>
-                    <td>{book.title}</td>
-                    <td>{book.author}</td>
-                    <td>{book.category}</td>
-                    <td>{book.quantity}</td>
-                    <td>
-                      <button
-                        className="edit-btn"
-                        onClick={() => {
-                          setEditId(book._id);
-                          setTitle(book.title);
-                          setAuthor(book.author);
-                          setCategory(book.category);
-                          setQuantity(book.quantity);
-                        }}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="delete-btn"
-                        onClick={() => handleDelete(book._id)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" style={{ textAlign: "center" }}>
-                    No Books Found
+                  <td>{book.category}</td>
+
+                  <td>{book.quantity}</td>
+
+                  <td>
+                    <button
+                      className="edit-btn"
+                      onClick={() => {
+                        setEditId(book._id);
+                        setTitle(book.title);
+                        setAuthor(book.author);
+                        setCategory(book.category);
+                        setQuantity(book.quantity);
+                      }}
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(book._id)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" style={{ textAlign: "center" }}>
+                  No Books Found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
-    </>
+    </div>
   );
 }
 
