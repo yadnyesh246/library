@@ -14,21 +14,50 @@ require_once "../config/db.php";
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-$title = $data["title"] ?? "";
-$author = $data["author"] ?? "";
-$category = $data["category"] ?? "";
+$title = trim($data["title"] ?? "");
+$author = trim($data["author"] ?? "");
+$category = trim($data["category"] ?? "");
 $quantity = (int)($data["quantity"] ?? 0);
 
-$result = $db->books->insertOne([
-    "title" => $title,
-    "author" => $author,
-    "category" => $category,
-    "quantity" => $quantity
-]);
+if (
+    $title === "" ||
+    $author === "" ||
+    $category === "" ||
+    $quantity <= 0
+) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Please enter valid book details"
+    ]);
 
-echo json_encode([
-    "status" => "success",
-    "message" => "Book Added Successfully"
-]);
+    exit();
+}
+
+try {
+
+    $result = $db->books->insertOne([
+        "title" => $title,
+        "author" => $author,
+        "category" => $category,
+
+        // Total copies
+        "totalQuantity" => $quantity,
+
+        // Currently available copies
+        "quantity" => $quantity
+    ]);
+
+    echo json_encode([
+        "status" => "success",
+        "message" => "Book Added Successfully"
+    ]);
+
+} catch (Exception $e) {
+
+    echo json_encode([
+        "status" => "error",
+        "message" => $e->getMessage()
+    ]);
+}
 
 ?>

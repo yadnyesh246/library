@@ -14,7 +14,12 @@ function ReturnBook() {
   const studentId = searchParams.get("studentId");
 
   useEffect(() => {
-    fetchIssuedBooks();
+    if (studentId) {
+      fetchIssuedBooks();
+    } else {
+      console.log("Student ID not found in URL");
+      setLoading(false);
+    }
   }, [studentId]);
 
   const fetchIssuedBooks = async () => {
@@ -27,17 +32,31 @@ function ReturnBook() {
 
       const data = await response.json();
 
+      console.log("Student ID from URL:", studentId);
+      console.log("Issued Books:", data);
+
+      if (!Array.isArray(data)) {
+        console.log("Invalid issued books data");
+        setIssuedBooks([]);
+        return;
+      }
+
       const studentBooks = data.filter(
         (book) =>
-          book.studentId === studentId &&
-          book.status === "Issued"
+          String(book.studentId).trim() === String(studentId).trim() &&
+          String(book.status).trim().toLowerCase() === "issued"
       );
+
+      console.log("Books for selected student:", studentBooks);
 
       setIssuedBooks(studentBooks);
 
       if (studentBooks.length > 0) {
-        setStudentName(studentBooks[0].studentName);
+        setStudentName(studentBooks[0].studentName || "");
+      } else {
+        setStudentName("");
       }
+
     } catch (error) {
       console.log("Issued Books Error:", error);
       alert("Unable to load issued books");
@@ -60,9 +79,11 @@ function ReturnBook() {
         "http://localhost/library-management/backend/api/returnBook.php",
         {
           method: "POST",
+
           headers: {
             "Content-Type": "application/json",
           },
+
           body: JSON.stringify({
             id: id,
           }),
@@ -76,6 +97,7 @@ function ReturnBook() {
       if (result.status === "success") {
         fetchIssuedBooks();
       }
+
     } catch (error) {
       console.log("Return Book Error:", error);
       alert("Something went wrong");
@@ -90,11 +112,42 @@ function ReturnBook() {
     );
   }
 
+  if (!studentId) {
+    return (
+      <>
+        <Sidebar />
+
+        <div className="main-content">
+          <Header />
+
+          <div className="return-book-page">
+
+            <h1>Return Book</h1>
+
+            <div className="no-return-books">
+
+              <h2>
+                Student Not Selected
+              </h2>
+
+              <p>
+                Student ID was not provided.
+              </p>
+
+            </div>
+
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <Sidebar />
 
       <div className="main-content">
+
         <Header />
 
         <div className="return-book-page">
@@ -183,6 +236,7 @@ function ReturnBook() {
           )}
 
         </div>
+
       </div>
     </>
   );

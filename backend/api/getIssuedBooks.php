@@ -23,46 +23,92 @@ try {
 
         $lateDays = 0;
         $fine = 0;
+        $displayStatus = $status;
+
+        /*
+        =========================================
+        CHECK OVERDUE
+        =========================================
+        */
 
         if ($status === "Issued" && !empty($returnDate)) {
 
             $dueDate = new DateTime($returnDate);
 
-            if ($today > $dueDate) {
+            // Date comparison only
+            $todayDate = new DateTime($today->format("Y-m-d"));
+            $dueDateOnly = new DateTime($dueDate->format("Y-m-d"));
 
-                $difference = $today->diff($dueDate);
+            if ($todayDate > $dueDateOnly) {
+
+                $difference = $dueDateOnly->diff($todayDate);
 
                 $lateDays = $difference->days;
+
                 $fine = $lateDays * $finePerDay;
-                $status = "Overdue";
+
+                // IMPORTANT:
+                // Database status remains "Issued"
+                // Only display status becomes "Overdue"
+
+                $displayStatus = "Overdue";
 
             } else {
 
                 $lateDays = 0;
                 $fine = 0;
-                $status = "Issued";
+                $displayStatus = "Issued";
             }
 
         } else {
 
+            // Returned book
             $lateDays = $book->lateDays ?? 0;
             $fine = $book->fine ?? 0;
+
+            if ($status === "Returned") {
+                $displayStatus = "Returned";
+            }
         }
 
+
+        /*
+        =========================================
+        SEND DATA
+        =========================================
+        */
+
         $data[] = [
+
             "_id" => (string)$book->_id,
+
             "studentId" => $book->studentId ?? "",
+
             "studentName" => $book->studentName ?? "",
+
             "bookId" => $book->bookId ?? "",
+
             "bookTitle" => $book->bookTitle ?? "",
+
             "issueDate" => $book->issueDate ?? "",
+
             "returnDate" => $returnDate,
+
             "actualReturnDate" => $book->actualReturnDate ?? "",
+
             "lateDays" => $lateDays,
+
             "fine" => $fine,
+
             "fineStatus" => $book->fineStatus ?? "Unpaid",
+
             "paidDate" => $book->paidDate ?? "",
-            "status" => $status
+
+            // Original database status
+            "status" => $status,
+
+            // Calculated display status
+            "displayStatus" => $displayStatus
         ];
     }
 

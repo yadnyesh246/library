@@ -46,6 +46,7 @@ function StudentDashboard() {
     }
   };
 
+  // Calculate late days
   const calculateLateDays = (book) => {
     if (!book.returnDate) {
       return 0;
@@ -57,12 +58,14 @@ function StudentDashboard() {
     dueDate.setHours(0, 0, 0, 0);
     today.setHours(0, 0, 0, 0);
 
+    // If book is returned
     if (book.status === "Returned") {
       if (!book.actualReturnDate) {
         return 0;
       }
 
       const actualReturnDate = new Date(book.actualReturnDate);
+
       actualReturnDate.setHours(0, 0, 0, 0);
 
       const difference =
@@ -75,6 +78,7 @@ function StudentDashboard() {
       return days > 0 ? days : 0;
     }
 
+    // If book is still issued
     const difference =
       today.getTime() - dueDate.getTime();
 
@@ -85,13 +89,16 @@ function StudentDashboard() {
     return days > 0 ? days : 0;
   };
 
+  // Calculate fine
   const calculateFine = (book) => {
-    if (book.fine !== undefined && book.fine !== null) {
-      return Number(book.fine);
+    // If fine is already paid
+    if (book.fineStatus === "Paid") {
+      return 0;
     }
 
     const lateDays = calculateLateDays(book);
 
+    // ₹10 fine per late day
     return lateDays * 10;
   };
 
@@ -111,22 +118,28 @@ function StudentDashboard() {
     );
   }
 
+  // Total books
   const totalBooks = issuedBooks.length;
 
+  // Currently issued books
   const issuedCount = issuedBooks.filter(
     (book) => book.status === "Issued"
   ).length;
 
+  // Returned books
   const returnedCount = issuedBooks.filter(
     (book) => book.status === "Returned"
   ).length;
 
- const totalFine = issuedBooks
-  .filter((book) => book.fineStatus !== "Paid")
-  .reduce(
-    (total, book) => total + Number(book.fine || 0),
-    0
-  );
+  // Total fine
+  const totalFine = issuedBooks
+    .filter((book) => book.fineStatus !== "Paid")
+    .reduce(
+      (total, book) => total + calculateFine(book),
+      0
+    );
+
+  // Overdue books
   const overdueBooks = issuedBooks.filter(
     (book) =>
       book.status === "Issued" &&
@@ -141,7 +154,10 @@ function StudentDashboard() {
         role="student"
       />
 
+      {/* Welcome Section */}
+
       <div className="student-welcome">
+
         <h1>
           Welcome {student.name || "Student"} 👋
         </h1>
@@ -149,64 +165,122 @@ function StudentDashboard() {
         <p>
           Here is your library account information.
         </p>
+
       </div>
+
+
+      {/* Statistics Cards */}
 
       <div className="student-stats">
 
         <div className="student-stat-card">
-          <h2>{totalBooks}</h2>
-          <p>Total Books</p>
+
+          <h2>
+            {totalBooks}
+          </h2>
+
+          <p>
+            Total Books
+          </p>
+
         </div>
 
-        <div className="student-stat-card">
-          <h2>{issuedCount}</h2>
-          <p>Currently Issued</p>
-        </div>
 
         <div className="student-stat-card">
-          <h2>{returnedCount}</h2>
-          <p>Returned Books</p>
+
+          <h2>
+            {issuedCount}
+          </h2>
+
+          <p>
+            Currently Issued
+          </p>
+
         </div>
 
+
         <div className="student-stat-card">
-          <h2>₹{totalFine}</h2>
-          <p>Total Fine</p>
+
+          <h2>
+            {returnedCount}
+          </h2>
+
+          <p>
+            Returned Books
+          </p>
+
+        </div>
+
+
+        <div className="student-stat-card">
+
+          <h2>
+            ₹{totalFine}
+          </h2>
+
+          <p>
+            Total Fine
+          </p>
+
         </div>
 
       </div>
 
+
+      {/* Overdue Books */}
+
       {overdueBooks.length > 0 && (
+
         <div className="student-overdue-alert">
 
-          <h2>⚠️ Overdue Books</h2>
+          <h2>
+            ⚠️ Overdue Books
+          </h2>
+
 
           {overdueBooks.map((book) => (
+
             <div
               className="overdue-book"
               key={book._id}
             >
+
               <p>
-                <strong>{book.bookTitle}</strong>
+                <strong>
+                  {book.bookTitle}
+                </strong>
               </p>
+
 
               <p>
                 Late Days: {calculateLateDays(book)}
               </p>
 
+
               <p>
                 Current Fine: ₹{calculateFine(book)}
               </p>
+
             </div>
+
           ))}
 
         </div>
+
       )}
+
+
+      {/* Profile */}
 
       <div className="student-profile">
 
-        <h2>My Profile</h2>
+        <h2>
+          My Profile
+        </h2>
+
 
         <div className="profile-row">
+
           <span className="profile-label">
             Name
           </span>
@@ -214,9 +288,12 @@ function StudentDashboard() {
           <span className="profile-value">
             {student.name || "N/A"}
           </span>
+
         </div>
 
+
         <div className="profile-row">
+
           <span className="profile-label">
             Email
           </span>
@@ -224,9 +301,12 @@ function StudentDashboard() {
           <span className="profile-value">
             {student.email || "N/A"}
           </span>
+
         </div>
 
+
         <div className="profile-row">
+
           <span className="profile-label">
             Username
           </span>
@@ -234,9 +314,12 @@ function StudentDashboard() {
           <span className="profile-value">
             {student.username || "N/A"}
           </span>
+
         </div>
 
+
         <div className="profile-row">
+
           <span className="profile-label">
             Course
           </span>
@@ -244,9 +327,12 @@ function StudentDashboard() {
           <span className="profile-value">
             {student.course || "N/A"}
           </span>
+
         </div>
 
+
         <div className="profile-row">
+
           <span className="profile-label">
             Year
           </span>
@@ -254,13 +340,20 @@ function StudentDashboard() {
           <span className="profile-value">
             {student.year || "N/A"}
           </span>
+
         </div>
 
       </div>
 
+
+      {/* My Books */}
+
       <div className="student-books">
 
-        <h2>My Books</h2>
+        <h2>
+          My Books
+        </h2>
+
 
         <div className="student-table-container">
 
@@ -269,16 +362,39 @@ function StudentDashboard() {
             <thead>
 
               <tr>
-                <th>Book</th>
-                <th>Issue Date</th>
-                <th>Due Date</th>
-                <th>Returned Date</th>
-                <th>Late Days</th>
-                <th>Fine</th>
-                <th>Status</th>
+
+                <th>
+                  Book
+                </th>
+
+                <th>
+                  Issue Date
+                </th>
+
+                <th>
+                  Due Date
+                </th>
+
+                <th>
+                  Returned Date
+                </th>
+
+                <th>
+                  Late Days
+                </th>
+
+                <th>
+                  Fine
+                </th>
+
+                <th>
+                  Status
+                </th>
+
               </tr>
 
             </thead>
+
 
             <tbody>
 
@@ -292,32 +408,42 @@ function StudentDashboard() {
                   const fine =
                     calculateFine(book);
 
+
                   return (
-                    <tr key={book._id}>
+
+                    <tr
+                      key={book._id}
+                    >
 
                       <td>
                         {book.bookTitle}
                       </td>
 
+
                       <td>
                         {book.issueDate || "-"}
                       </td>
+
 
                       <td>
                         {book.returnDate || "-"}
                       </td>
 
+
                       <td>
                         {book.actualReturnDate || "-"}
                       </td>
+
 
                       <td>
                         {lateDays}
                       </td>
 
+
                       <td>
                         ₹{fine}
                       </td>
+
 
                       <td>
 
@@ -348,7 +474,9 @@ function StudentDashboard() {
                       </td>
 
                     </tr>
+
                   );
+
                 })
 
               ) : (
