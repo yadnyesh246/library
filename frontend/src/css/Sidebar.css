@@ -1,0 +1,190 @@
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  box-sizing: border-box;
+  overflow-y: auto;
+  background: linear-gradient(160deg, #0d47a1 0%, #1554ad 52%, #08306b 100%) !important;
+  color: white;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 24px 16px;
+  animation: sidebar-slide .5s ease both;
+  opacity: 1;
+  box-shadow: 8px 0 28px rgba(13, 47, 104, .18);
+  border-right: 1px solid rgba(255,255,255,.12);
+  z-index: 2;
+}
+
+.sidebar h2 {
+  text-align: center;
+  margin: 0 0 34px;
+  font-size: 22px;
+  letter-spacing: .2px;
+  text-shadow: 0 2px 12px rgba(0,0,0,.18);
+}
+
+.sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 7px 0;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 15px;
+  display: block;
+  padding: 12px 13px;
+  transition: 0.25s ease;
+  border-radius: 6px;
+  border: 1px solid rgba(255,213,79,.35);
+  background: linear-gradient(90deg, rgba(255,213,79,.24), rgba(255,255,255,.08));
+  box-shadow: inset 3px 0 #ffd54f, 0 5px 14px rgba(0,0,0,.1);
+  letter-spacing: .1px;
+}
+
+.sidebar ul li a:hover {
+  color: #ffd54f;
+  padding-left: 17px;
+  background: rgba(255,255,255,.08);
+}
+
+.sidebar ul li a.active {
+  color: #fff;
+  background: linear-gradient(90deg, rgba(255,213,79,.24), rgba(255,255,255,.08));
+  border-color: rgba(255,213,79,.35);
+  box-shadow: inset 3px 0 #ffd54f, 0 5px 14px rgba(0,0,0,.1);
+}
+
+.sidebar ul li:last-child {
+  position: static;
+  margin: 24px 0 0;
+  background: transparent;
+}
+
+.sidebar ul li:last-child .logout-link {
+  border: 1px solid transparent;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.sidebar.student-sidebar ul li:last-child .logout-link {
+  background: linear-gradient(90deg, rgba(255,213,79,.24), rgba(255,255,255,.08));
+  border-color: rgba(255,213,79,.35);
+  box-shadow: inset 3px 0 #ffd54f, 0 5px 14px rgba(0,0,0,.1);
+}
+
+.admin-profile {
+  position: static;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1;
+  background: linear-gradient(160deg, rgba(255,255,255,.1), rgba(8,48,107,.48));
+  text-align: center;
+  padding: 22px 12px 18px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 12px 12px 0 0;
+  margin-top: 18px;
+  box-shadow: 0 -8px 24px rgba(0,0,0,.08);
+}
+
+.admin-profile img {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  object-fit: cover;
+  box-shadow: 0 0 0 4px rgba(255,213,79,.3), 0 8px 18px rgba(0,0,0,.2);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.profile-image-picker {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  transition: transform .25s ease;
+}
+
+.profile-image-picker:hover {
+  transform: translateY(-3px) scale(1.04);
+}
+
+.profile-image-picker:hover img {
+  box-shadow: 0 0 0 6px rgba(255,213,79,.4), 0 10px 22px rgba(0,0,0,.25);
+}
+
+.profile-image-picker span {
+  position: absolute;
+  right: 0;
+  bottom: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffd54f;
+  color: #0d47a1;
+  font-size: 18px;
+  line-height: 19px;
+  font-weight: bold;
+  transition: transform .2s ease;
+}
+
+.profile-image-picker:hover span {
+  transform: rotate(90deg);
+}
+
+.profile-image-picker input {
+  display: none;
+}
+
+.admin-profile h3 {
+  margin: 12px 0 6px;
+  font-size: 17px;
+  letter-spacing: .5px;
+}
+
+.admin-profile p {
+  display: inline-block;
+  margin: 0;
+  padding: 4px 11px;
+  border: 1px solid rgba(255,213,79,.45);
+  border-radius: 999px;
+  background: rgba(255,213,79,.14);
+  font-size: 11px;
+  letter-spacing: .4px;
+  color: #d8e5f5;
+}
+
+.dashboard-content {
+  margin-left: 250px;
+}
+
+@keyframes sidebar-slide {
+  from { transform: translateX(-18px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+  }
+
+  .sidebar ul li:last-child {
+    position: static;
+    margin: 7px 0;
+    background: transparent;
+  }
+
+  .admin-profile {
+    position: static;
+    margin-top: 20px;
+  }
+}

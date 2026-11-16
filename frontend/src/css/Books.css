@@ -1,0 +1,139 @@
+.main-content{
+    margin-left:240px;
+    padding:30px;
+    background:#f5f7fb;
+    min-height:100vh;
+}
+
+.book-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.book-header button {
+    background: #0d47a1;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.book-header button:hover {
+    background: #1565c0;
+}
+
+.book-table {
+    margin-top: 30px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
+}
+
+.book-filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 90%;
+    max-width: 1100px;
+    margin: 24px auto 0;
+}
+
+.book-filters input,
+.book-filters select {
+    box-sizing: border-box;
+    min-height: 42px;
+    padding: 10px 12px;
+    border: 1px solid #cfd8e3;
+    border-radius: 6px;
+    background: #fff;
+    color: #25313d;
+}
+
+.book-filters input {
+    flex: 1;
+    min-width: 220px;
+}
+
+.book-result-count {
+    color: #5f6b78;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.availability-status {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 14px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.availability-status.available {
+    background: #e7f6ec;
+    color: #23733d;
+}
+
+.availability-status.unavailable {
+    background: #fdeaea;
+    color: #b42318;
+}
+
+.book-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.book-table th {
+    background: #0d47a1;
+    color: white;
+    padding: 14px;
+}
+
+.book-table td {
+    padding: 14px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.book-table td button {
+    margin: 0 5px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.book-table td button:first-child {
+    background: #ffc107;
+}
+
+.book-table td button:last-child {
+    background: #dc3545;
+    color: white;
+}
+.add-book,
+.book-table{
+    width:90%;
+    max-width:1100px;
+    margin:30px auto;
+}
+
+.book-table table{
+    width:100%;
+}
+
+@media (max-width: 700px) {
+    .book-filters {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .book-filters input {
+        min-width: 0;
+    }
+}
